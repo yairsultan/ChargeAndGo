@@ -23,4 +23,5 @@ app.use('/user',user)
 app.use('/station',station)
 app.use('/', home)
 
+
 app.listen(3000, () => console.log('Server Started'))
