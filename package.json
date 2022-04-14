@@ -9,6 +9,8 @@
   "author": "Yair Sultan, Shay Reuven, Meny Ben Atar, Chen Toaff",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-session": "^2.0.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",

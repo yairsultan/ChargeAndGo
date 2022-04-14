@@ -2,31 +2,27 @@ require('dotenv').config()
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-
-const express = require('express')
 const mongoose = require('mongoose')
 
-mongoose.connect(process.env.DATABASE_URL, { 
-    useNewUrlParser: true})
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true})
 const db = mongoose.connection
-db.on('error', (error) => console.log(error))
 db.once('open', (error) => console.log('connected to Database'))
 
+
+const express = require('express')
+const app = express()
 const order = require('./routes/order')
 const user = require('./routes/user')
 const station = require('./routes/station')
-const home = require('./routes/home')
 const req = require('express/lib/request')
-const app = express()
-
 
 app.use(express.json())
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/order',order)
 app.use('/user',user)
 app.use('/station',station)
-app.use('/', home)
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
 
 
 app.listen(3000, () => console.log('Server Started'))
