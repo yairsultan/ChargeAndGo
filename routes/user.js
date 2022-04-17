@@ -24,22 +24,29 @@ function validate_token(req,res,next){
   });
 }
 
-router.post('/register', (req, res) => {
-  reg_user  = { ...req.body}
-  reg_user.password = bcrypt.hashSync(reg_user.password, 8);
-  // TODO: chack email if exist || add role default regular
-  user = new UserSchema(reg_user);
-  user.validateSync();
-  user.save(function(err,result){
-    if (err){
-        console.log(err);
+async function userExist(email) {
+  flag = true
+  console.log(await UserSchema.findOne({ 'email': email}))
+  if(await UserSchema.findOne({ 'email': email}) === null){
+    flag = false
+  }
+  return flag;
+}
+
+router.post('/register', async(req, res) => {
+  try {
+    if(await userExist(req.body.email) === true){
+        res.json({msg:"User alrady exist!"})
     }
-    else{
-        console.log(result)
-    }
-  });
-  res.json({msg:"User was registered successfully!",token:generateAccessToken(user.email)});
-})
+    user = new UserSchema({ ...req.body});
+    user.validateSync();
+    user.password = bcrypt.hashSync(user.password, 8);
+    user.save()
+    res.json({msg:"User was registered successfully!",token:generateAccessToken(user.email)});
+  } catch (error) {
+      res.status(400).json({msg:"format is not good"})
+  }
+});
 
 router.post('/login', async (req, res) => {
   var user = await UserSchema.findOne({ 'email': req.body.email})
@@ -65,7 +72,19 @@ router.post('/login', async (req, res) => {
 
 router.get('/:id',validate_token,async (req, res) =>{
   var user = await UserSchema.findOne({ 'email': req.params.id})
-  // TODO: continue
+  res.json({
+    firstName:user.firstName,
+    lastName: user.lastName,
+    email:user.email,
+    phone:user.phone
+  })
 })
 
+router.put('/:id',validate_token,async (req, res) =>{
+  var user_db = await UserSchema.findOne({ 'email': req.params.id})
+  
+
+
+
+})
 module.exports = router
