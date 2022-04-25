@@ -4,11 +4,11 @@ const UserSchema = require('./user')
 const StationSchema = require('./station')
 
 const OrderSchema = new Schema({
-  userId: UserSchema.id,
-  stationId: StationSchema.id,
-  price: Number,
+  userId: {type: UserSchema.id,required: true},
+  stationId: {type: StationSchema.id,required: true},
+  price:  {type: Number,required: true},
   appointmentDate: {type: Date, default : Date.now},
-  startTime: Date,
-  endTime: Date,
-  status: {type: String, enum: ['placed', 'approved', 'inProgress', 'finished'], default: 'A'}
+  startTime: {type:Date,required: true},
+  endTime: {type:Date,required: true},
+  status: {type: String, enum: ['placed', 'approved', 'inProgress', 'finished'], default: 'placed',required: true},
 });

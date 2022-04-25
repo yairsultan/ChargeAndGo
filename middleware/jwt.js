@@ -13,9 +13,14 @@ function verify_token(req,res,next){
       next();
     });
   }
-
+  function verify_admin(req,res,next){
+    //TODO: Check Role - (needed add user schema role enam)
+    
+      next();
+    
+  }
   function generateAccessToken(id) {
     return jwt.sign({_id: id}, process.env.TOKEN_SECRET, { expiresIn: '1800m' });
   }
 
-  module.exports = {verify_token, generateAccessToken}
+  module.exports = {verify_token, generateAccessToken,verify_admin}

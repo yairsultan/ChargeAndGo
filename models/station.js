@@ -4,12 +4,12 @@ const UserSchema = require('./user')
 const OrderSchema = require('./order')
 
 const StationSchema = new Schema({
-  address: String,
-  userId: UserSchema.id,
-  rating: String,
+  userId: { type: UserSchema.id,required: true},
+  address: { type: String, required: true},
+  rating: { type: String, required: true},
   stationtype: {type: String, enum: ['A', 'B', 'C', 'D'], default: 'A'},
-  latitude: Number,
-  longitude: Number,
+  latitude: {type: Number,required: true},
+  longitude: {type: Number,required: true},
   orders: [OrderSchema]
 
 });
